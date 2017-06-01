@@ -1,8 +1,8 @@
 import javax.ws.rs.*;
 
+@Path("/economicIndicator/{indicatorType}")
+
 public class ServerEconomicIndicator {
-    @Path("/economicIndicator/{indicatorType}")
-    public class ServerCurrencyPrice {
         @GET
         @Produces("text/plain")
         public String getIndicator(@PathParam("indicatorType") String indicatorType, @QueryParam("time") String time) {
@@ -16,5 +16,4 @@ public class ServerEconomicIndicator {
             }
             return "economic market indicators not yet implemented";
         }
-    }
 }

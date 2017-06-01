@@ -3,9 +3,9 @@ import utils.JFCurrency;
 import javax.ws.rs.*;
 import java.time.LocalDateTime;
 
+@Path("/currency_price_stat/{statType}")
+
 public class ServerCurrencyPriceStat {
-    @Path("/currency_price_stat/{statType}")
-    public class ServerCurrencyPrice {
         @GET
         @Produces("text/plain")
         public String getPriceStat(@PathParam("statType") String statType, @QueryParam("currency") String currency, @QueryParam("time") String time) {
@@ -32,5 +32,4 @@ public class ServerCurrencyPriceStat {
             }
             return "currency price averages not yet implemented";
         }
-    }
 }
