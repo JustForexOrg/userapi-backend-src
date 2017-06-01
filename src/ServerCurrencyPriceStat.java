@@ -8,7 +8,7 @@ public class ServerCurrencyPriceStat {
     public class ServerCurrencyPrice {
         @GET
         @Produces("text/plain")
-        public String getPriceStat(@PathParam("statType") String statType, @QueryParam("currency") String currency) {
+        public String getPriceStat(@PathParam("statType") String statType, @QueryParam("currency") String currency, @QueryParam("time") String time) {
             // TODO: highs and lows for each interval
             // Hour H/L, Day H/L, Week H/L, Month H/L, 6-month H/L, year H/L
 
