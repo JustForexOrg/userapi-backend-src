@@ -7,7 +7,10 @@ import java.time.LocalDateTime;
 public class ServerCurrencyPrice {
     @GET
     @Produces("text/plain")
-    public String getPrice(@DefaultValue("USD") @QueryParam("target") String target, @DefaultValue("USD") @QueryParam("base") String base, @QueryParam("time") String time) {
+    public String getPrice(@DefaultValue("USD") @QueryParam("target") String target,
+                           @DefaultValue("USD") @QueryParam("base") String base,
+                           @QueryParam("time") String time) {
+        // time format: e.g. 2007-12-03T10:15:30
         JFCurrency targetJFCurrency = utils.ServerUtils.currencyFromString(target);
         JFCurrency baseJFCurrency = utils.ServerUtils.currencyFromString(base);
         LocalDateTime localDateTime = utils.ServerUtils.timeFromString(time);

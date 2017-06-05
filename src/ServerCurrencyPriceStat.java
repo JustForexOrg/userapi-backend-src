@@ -1,4 +1,5 @@
 import utils.JFCurrency;
+import utils.ServerUtils;
 
 import javax.ws.rs.*;
 import java.time.LocalDateTime;
@@ -8,11 +9,14 @@ import java.time.LocalDateTime;
 public class ServerCurrencyPriceStat {
         @GET
         @Produces("text/plain")
-        public String getPriceStat(@PathParam("statType") String statType, @QueryParam("currency") String currency, @QueryParam("time") String time) {
+        public String getPriceStat(@PathParam("statType") String statType,
+                                   @QueryParam("currency") String currency,
+                                   @QueryParam("time") String time) {
             // TODO: highs and lows for each interval
             // Hour H/L, Day H/L, Week H/L, Month H/L, 6-month H/L, year H/L
 
             JFCurrency jfCurrency = utils.ServerUtils.currencyFromString(currency);
+            LocalDateTime localDateTime = ServerUtils.timeFromString(time);
 
             // TODO: Implement and delegate this to other methods
             switch (statType) {

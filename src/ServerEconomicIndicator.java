@@ -1,19 +1,32 @@
+import apidata.EconomicIndicator;
+
 import javax.ws.rs.*;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Path("/economicIndicator/{indicatorType}")
 
 public class ServerEconomicIndicator {
         @GET
         @Produces("text/plain")
-        public String getIndicator(@PathParam("indicatorType") String indicatorType, @QueryParam("time") String time) {
-            // TODO: Implement and delegate this to other methods - enums for each dataset
-            switch (indicatorType) {
-                case "interestRate":
-                case "inflationRate":
-                case "quarterlyGrowth":
-                case "creditRating":
-                default:
+        public String getIndicator(@PathParam("indicatorType") String indicatorType,
+                                   @QueryParam("indicator") String indicator,
+                                   @QueryParam("time") String time) {
+            LocalDateTime localDateTime = LocalDateTime.parse(time);
+            try {
+                switch (indicatorType) {
+                    case "interestRate":
+                        return String.valueOf(EconomicIndicator.getInterestRate(indicator, localDateTime));
+                    case "inflationRate":
+                        return String.valueOf(EconomicIndicator.getInflationRate(indicator, localDateTime));
+                    case "quarterlyGrowth":
+                        return String.valueOf(EconomicIndicator.getQuarterlyGrowth(indicator, localDateTime));
+                    case "creditRating":
+                        return String.valueOf(EconomicIndicator.getCreditRating(indicator, localDateTime));
+                }
+            } catch (IOException ioe) {
+                return "An error occurred";
             }
-            return "economic market indicators not yet implemented";
+            return "";
         }
 }

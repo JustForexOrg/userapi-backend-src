@@ -8,7 +8,6 @@ public class ServerUtils {
     }
 
     public static LocalDateTime timeFromString(String time) {
-        // TODO LocalDateTime object from String
-        return null;
+        return LocalDateTime.parse(time);
     }
 }
