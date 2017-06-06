@@ -21,12 +21,10 @@ public class ServerEconomicIndicator {
                         return String.valueOf(EconomicIndicator.getInflationRate(indicator, localDateTime));
                     case "quarterlyGrowth":
                         return String.valueOf(EconomicIndicator.getQuarterlyGrowth(indicator, localDateTime));
-                    case "creditRating":
-                        return String.valueOf(EconomicIndicator.getCreditRating(indicator, localDateTime));
                 }
             } catch (IOException ioe) {
                 return "An error occurred";
             }
-            return "";
+            return null;
         }
 }

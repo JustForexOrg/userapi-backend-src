@@ -77,8 +77,4 @@ public class EconomicIndicator {
                 .getJSONArray("0")
                 .getDouble(0);
     }
-
-    public static float getCreditRating(String indicator, LocalDateTime time) {
-        return 0; //TODO
-    }
 }
