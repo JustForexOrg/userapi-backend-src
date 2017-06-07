@@ -16,14 +16,14 @@ public class CurrencyPrice {
 
     private static List<Pair<String, Double>> p = new ArrayList<>();
 
-    float getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
+    static float getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
         DateTime time  = new DateTime(t);
         String filename = "_"+year+".json";
 
-        if(baseCurrency == JFCurrency.USD) {
-
-        } else {
+//        if(targetCurrency != JFCurrency.USD) {
+//
+//        } else {
             filename = System.getProperty("user.dir") +
                        File.separator +
                        "src/stockData/" +
@@ -33,12 +33,11 @@ public class CurrencyPrice {
             readFile(filename);
 
             for(Pair<String,Double> pair:p) {
-                System.out.println(pair.getElement0());
-                System.out.println(pair.getElement1());
+                System.out.println(pair.getElement0() + ": " + pair.getElement1());
             }
             // open file as array of arrays
             // search outer array for inner head of arrays & return the tail
-        }
+//        }
         return 0;
     }
 

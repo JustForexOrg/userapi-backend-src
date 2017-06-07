@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +22,11 @@ public class readFileTest {
         String fileName = "src/stockData/test.json";
         fileName = System.getProperty("user.dir") + File.separator + fileName;
 
-        CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, /* date */);
+        LocalDateTime date = LocalDateTime.parse("2014-01-02T01:02:00");
 
-        CurrencyPrice.
+        CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date);
+
+
 
 //                test that currency price works
 
