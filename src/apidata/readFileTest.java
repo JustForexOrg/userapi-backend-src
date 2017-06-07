@@ -19,7 +19,6 @@ public class readFileTest {
             list = stream
                     .filter(line -> line.startsWith("[2"))
                     .map(readFileTest::removeComma)
-                    .map(String::toUpperCase)
                     .collect(Collectors.toList());
 
         } catch (IOException e) {
@@ -27,6 +26,22 @@ public class readFileTest {
         }
 
         list.forEach(System.out::println);
+
+        String j = list.get(0);
+
+        List<Pair<String, Double>> l = makePair(list);
+    }
+
+    private static List<Pair<String, Double>> makePair(List<String> str) {
+        List<Pair<String, Double>> p = new ArrayList<>();
+        for (String s: str) {
+            String fst = s.substring(1, s.indexOf(","));
+            Double snd = Double.parseDouble(s.substring(s.indexOf(",")+1, s.length()-1));
+            System.out.println(fst);
+            System.out.println(snd);
+            p.add(new Pair<String, Double>(fst, snd));
+        }
+        return p;
     }
 
     private static String removeComma(String s) {
