@@ -21,23 +21,19 @@ public class CurrencyPrice {
         DateTime time  = new DateTime(t);
         String filename = "_"+year+".json";
 
-//        if(targetCurrency != JFCurrency.USD) {
-//
-//        } else {
-            filename = System.getProperty("user.dir") +
-                       File.separator +
-                       "src/stockData/" +
-                       targetCurrency.toString() +
-                       filename;
+//TODO: Wrap around if due to different conditions based on currencies
+        filename = System.getProperty("user.dir") +
+                   File.separator +
+                   "src/stockData/" +
+                   targetCurrency.toString() +
+                   filename;
 
-            readFile(filename);
+        readFile(filename);
 
-            for(Pair<String,Double> pair:p) {
-                System.out.println(pair.getElement0() + ": " + pair.getElement1());
-            }
-            // open file as array of arrays
-            // search outer array for inner head of arrays & return the tail
-//        }
+        for(Pair<String,Double> pair:p) {
+            System.out.println(pair.getElement0() + ": " + pair.getElement1());
+        }
+
         return 0;
     }
 
