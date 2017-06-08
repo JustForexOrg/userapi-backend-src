@@ -29,40 +29,37 @@ public class CurrencyPrice {
         System.out.println(targetCurrency + " -> " + baseCurrency);
         System.out.println(t + " -> " + time);
 
-        //TODO: Wrap around if due to different conditions based on currencies
+        boolean isTargetUSD = false;
+        String currency = "";
+
         if (targetCurrency == baseCurrency) {
             return 1;
         } else if (baseCurrency == JFCurrency.USD) {
-            filename = System.getProperty("user.dir") +
-                    File.separator +
-                    "src/stockData/" +
-                    targetCurrency.toString() +
-                    filename;
+            currency = targetCurrency.toString();
         } else if (targetCurrency == JFCurrency.USD) {
-            filename = System.getProperty("user.dir") +
-                    File.separator +
-                    "src/stockData/" +
-                    targetCurrency.toString() +
-                    filename;
+            currency = baseCurrency.toString();
+            isTargetUSD = true;
         }
+
+        filename = System.getProperty("user.dir") + File.separator +
+                "src" + File.separator +
+                "stockData" + File.separator +
+                currency + filename;
 
         System.out.println(filename);
         // TODO: merge searchFile and readFile
         // TODO: stop searching file after date (as it's in ascending order) (is there any point? do we want all in memory?)
         readFile(filename);
-        Double value = searchFile(time);
 
 //        for (HashMap.Entry entry:p.entrySet()) {
 //            System.out.println(entry);
 //        }
 
-        System.out.println(value);
-
-        return 0;
+        return searchFile(time, isTargetUSD);
     }
 
     // searches the file for the given time
-    private static Double searchFile(String time, Boolean isTargetUSD) {
+    private static Double searchFile(String time, boolean isTargetUSD) {
         final Double firstValue = p.entrySet().iterator().next().getValue();
         final Double value = p.getOrDefault(time, firstValue);
         return (isTargetUSD) ? 1/value: value;
