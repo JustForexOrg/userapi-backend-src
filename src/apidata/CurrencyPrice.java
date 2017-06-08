@@ -7,13 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-// TODO: Switch to using hashmap instead of pair?
 
 public class CurrencyPrice {
 
@@ -22,10 +18,11 @@ public class CurrencyPrice {
 
     static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
-        // TODO: refactor
+        // TODO: refactor datetime
         String time = DateTime.time(t);
         String filename = "_" + year + ".json";
 
+        // Testing
         System.out.println(targetCurrency + " -> " + baseCurrency);
         System.out.println(t + " -> " + time);
 
@@ -45,12 +42,13 @@ public class CurrencyPrice {
                 "src" + File.separator +
                 "stockData" + File.separator +
                 currency + filename;
-
+        // Testing
         System.out.println(filename);
         // TODO: merge searchFile and readFile
         // TODO: stop searching file after date (as it's in ascending order) (is there any point? do we want all in memory?)
         readFile(filename);
 
+        // Testing
 //        for (HashMap.Entry entry:p.entrySet()) {
 //            System.out.println(entry);
 //        }
