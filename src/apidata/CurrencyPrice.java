@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class CurrencyPrice {
 
-//    private static List<Pair<String, Double>> p = new ArrayList<>();
+    // TODO: Turn into a list of hashMaps; one for each file
     private static HashMap<String, Double> p = new HashMap<>();
 
     static float getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
@@ -38,7 +38,7 @@ public class CurrencyPrice {
 
         System.out.println(filename);
         // TODO: merge searchFile and readFile
-        // TODO: stop searching file after date (as it's in ascending order)
+        // TODO: stop searching file after date (as it's in ascending order) (is there any point? do we want all in memory?)
         readFile(filename);
         Double value = searchFile(time);
 
@@ -51,11 +51,13 @@ public class CurrencyPrice {
         return 0;
     }
 
+    // searches the file for the given time
     private static Double searchFile(String time) {
-        return p.get(time);
+        final Double firstValue = p.entrySet().iterator().next().getValue();
+        return p.getOrDefault(time, firstValue);
     }
 
-    static void readFile(String filename) {
+    private static void readFile(String filename) {
         try (Stream<String> stream = Files.lines(Paths.get(filename))) {
             stream
                     .filter(line -> line.startsWith("[2"))
@@ -67,14 +69,13 @@ public class CurrencyPrice {
     }
 
     // removes trailing comma if present
-    // splits string into a pair of string to double
+    // splits string into a pair of string to double which is added to the hashMap
     private static String format(String s) {
         if (s.endsWith(",")) {
             s = s.substring(0, s.length() - 1);
         }
         String fst = s.substring(1, s.indexOf(","));
         Double snd = Double.parseDouble(s.substring(s.indexOf(",")+1, s.length()-1));
-//        p.add(new Pair<>(fst, snd));
         p.put(fst, snd);
         return s;
     }
