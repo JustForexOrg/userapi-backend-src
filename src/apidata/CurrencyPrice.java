@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,7 +17,8 @@ import java.util.stream.Stream;
 
 public class CurrencyPrice {
 
-    private static List<Pair<String, Double>> p = new ArrayList<>();
+//    private static List<Pair<String, Double>> p = new ArrayList<>();
+    private static HashMap<String, Double> p = new HashMap<>();
 
     static float getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
@@ -35,13 +37,22 @@ public class CurrencyPrice {
                    filename;
 
         System.out.println(filename);
+        // TODO: merge searchFile and readFile
+        // TODO: stop searching file after date (as it's in ascending order)
         readFile(filename);
+        Double value = searchFile(time);
 
-//        for(Pair<String,Double> pair:p) {
-//            System.out.println(pair.getElement0() + ": " + pair.getElement1());
+//        for (HashMap.Entry entry:p.entrySet()) {
+//            System.out.println(entry);
 //        }
 
+        System.out.println(value);
+
         return 0;
+    }
+
+    private static Double searchFile(String time) {
+        return p.get(time);
     }
 
     static void readFile(String filename) {
@@ -63,7 +74,8 @@ public class CurrencyPrice {
         }
         String fst = s.substring(1, s.indexOf(","));
         Double snd = Double.parseDouble(s.substring(s.indexOf(",")+1, s.length()-1));
-        p.add(new Pair<>(fst, snd));
+//        p.add(new Pair<>(fst, snd));
+        p.put(fst, snd);
         return s;
     }
 
