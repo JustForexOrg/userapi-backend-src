@@ -19,9 +19,9 @@ json.each do |l|
     year = t[0,4]
     mon = t[4,2]
     day = t[6,2]
-    hr = t[7,2]
-    min = t[9,2]
-    sec = t[11,2]
+    hr = t[9,2]
+    min = t[11,2]
+    sec = t[13,2]
     
     if l.end_with?(",")
       outFile.puts("[#{Time.new(year,mon,day, hr,min,sec).to_i*1000},#{val}],")
