@@ -20,8 +20,12 @@ public class CurrencyPrice {
 
     static float getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
-        DateTime time  = new DateTime(t);
+        // TODO: refactor
+        String time  = DateTime.time(t);
         String filename = "_"+year+".json";
+
+        System.out.println(targetCurrency + " -> " + baseCurrency);
+        System.out.println(t + " -> " + time);
 
 //TODO: Wrap around if due to different conditions based on currencies
         filename = System.getProperty("user.dir") +
@@ -30,11 +34,12 @@ public class CurrencyPrice {
                    targetCurrency.toString() +
                    filename;
 
+        System.out.println(filename);
         readFile(filename);
 
-        for(Pair<String,Double> pair:p) {
-            System.out.println(pair.getElement0() + ": " + pair.getElement1());
-        }
+//        for(Pair<String,Double> pair:p) {
+//            System.out.println(pair.getElement0() + ": " + pair.getElement1());
+//        }
 
         return 0;
     }
