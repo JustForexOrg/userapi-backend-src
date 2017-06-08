@@ -2,7 +2,7 @@
 file = ARGV[0]
 
 # filename with json extension
-fileName = File.basename(file, File.extname(file)) + "2.json"
+fileName = "2" + File.basename(file, File.extname(file)) + ".json"
 
 # create a target file which will be filename2.json
 outFile = File.new("#{fileName}", "w")
