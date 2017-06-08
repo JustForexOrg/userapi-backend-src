@@ -19,7 +19,7 @@ public class CurrencyPrice {
     static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
         // TODO: refactor datetime
-        String time = DateTime.time(t);
+        String time = DateWrapper.time(t);
         String filename = "_" + year + ".json";
 
         // Testing
@@ -66,7 +66,7 @@ public class CurrencyPrice {
     private static void readFile(String filename) {
         try (Stream<String> stream = Files.lines(Paths.get(filename))) {
             stream
-                    .filter(line -> line.startsWith("[2"))
+                    .filter(line -> line.startsWith("[1"))
                     .map(CurrencyPrice::format)
                     .collect(Collectors.toList());
         } catch (IOException e) {
