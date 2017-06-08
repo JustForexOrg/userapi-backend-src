@@ -23,8 +23,8 @@ public class CurrencyPrice {
         String filename = "_" + year + ".json";
 
         // Testing
-        System.out.println(targetCurrency + " -> " + baseCurrency);
-        System.out.println(t + " -> " + time);
+//        System.out.println(targetCurrency + " -> " + baseCurrency);
+//        System.out.println(t + " -> " + time);
 
         boolean isTargetUSD = false;
         String currency = "";
@@ -43,7 +43,7 @@ public class CurrencyPrice {
                 "stockData" + File.separator +
                 currency + filename;
         // Testing
-        System.out.println(filename);
+        // System.out.println(filename);
         // TODO: merge searchFile and readFile
         // TODO: stop searching file after date (as it's in ascending order) (is there any point? do we want all in memory?)
         readFile(filename);
