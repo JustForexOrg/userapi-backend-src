@@ -17,24 +17,34 @@ import java.util.stream.Stream;
 
 public class CurrencyPrice {
 
-    // TODO: Turn into a list of hashMaps; one for each file
+    // TODO: Turn into a list of hashMaps; one for each file?
     private static HashMap<String, Double> p = new HashMap<>();
 
-    static float getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
+    static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
         // TODO: refactor
-        String time  = DateTime.time(t);
-        String filename = "_"+year+".json";
+        String time = DateTime.time(t);
+        String filename = "_" + year + ".json";
 
         System.out.println(targetCurrency + " -> " + baseCurrency);
         System.out.println(t + " -> " + time);
 
-//TODO: Wrap around if due to different conditions based on currencies
-        filename = System.getProperty("user.dir") +
-                   File.separator +
-                   "src/stockData/" +
-                   targetCurrency.toString() +
-                   filename;
+        //TODO: Wrap around if due to different conditions based on currencies
+        if (targetCurrency == baseCurrency) {
+            return 1;
+        } else if (baseCurrency == JFCurrency.USD) {
+            filename = System.getProperty("user.dir") +
+                    File.separator +
+                    "src/stockData/" +
+                    targetCurrency.toString() +
+                    filename;
+        } else if (targetCurrency == JFCurrency.USD) {
+            filename = System.getProperty("user.dir") +
+                    File.separator +
+                    "src/stockData/" +
+                    targetCurrency.toString() +
+                    filename;
+        }
 
         System.out.println(filename);
         // TODO: merge searchFile and readFile
@@ -52,9 +62,10 @@ public class CurrencyPrice {
     }
 
     // searches the file for the given time
-    private static Double searchFile(String time) {
+    private static Double searchFile(String time, Boolean isTargetUSD) {
         final Double firstValue = p.entrySet().iterator().next().getValue();
-        return p.getOrDefault(time, firstValue);
+        final Double value = p.getOrDefault(time, firstValue);
+        return (isTargetUSD) ? 1/value: value;
     }
 
     private static void readFile(String filename) {
