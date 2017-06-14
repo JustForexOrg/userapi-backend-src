@@ -1,3 +1,4 @@
+import apidata.CurrencyPrice;
 import utils.JFCurrency;
 
 import javax.ws.rs.*;
@@ -14,6 +15,6 @@ public class ServerCurrencyPrice {
         JFCurrency targetJFCurrency = utils.ServerUtils.currencyFromString(target);
         JFCurrency baseJFCurrency = utils.ServerUtils.currencyFromString(base);
         LocalDateTime localDateTime = utils.ServerUtils.timeFromString(time);
-        return "currency price not yet implemented";
+        return String.valueOf(CurrencyPrice.getPrice(targetJFCurrency, baseJFCurrency, localDateTime));
     }
 }

@@ -16,7 +16,7 @@ public class CurrencyPrice {
     // TODO: Turn into a list of hashMaps; one for each file?
     private static HashMap<String, Double> p = new HashMap<>();
 
-    static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
+    public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
         // TODO: refactor datetime
         String time = DateWrapper.time(t);
