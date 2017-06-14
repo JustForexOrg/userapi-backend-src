@@ -36,6 +36,26 @@ public class CurrencyPrice {
         } else if (targetCurrency == JFCurrency.USD) {
             currency = baseCurrency.toString();
             isTargetUSD = true;
+        } else {
+            String baseFile = System.getProperty("user.dir") + File.separator +
+                    "src" + File.separator +
+                    "stockData" + File.separator +
+                    baseCurrency + filename;
+            readFile(baseFile);
+            double base = searchFile(baseFile, false);
+//            System.out.println(base);
+
+            p.clear();
+
+            String targetFile = System.getProperty("user.dir") + File.separator +
+                    "src" + File.separator +
+                    "stockData" + File.separator +
+                    targetCurrency + filename;
+            readFile(targetFile);
+            double target = searchFile(targetFile, false);
+//            System.out.println(target);
+
+            return target/base;
         }
 
         filename = System.getProperty("user.dir") + File.separator +
