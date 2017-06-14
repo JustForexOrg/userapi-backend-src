@@ -1,5 +1,6 @@
 package apidata;
 
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import utils.JFCurrency;
 
 import javax.servlet.ServletContext;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -31,7 +33,7 @@ public class CurrencyPrice {
 //        System.out.println(t + " -> " + time);
 
         boolean isTargetUSD = false;
-        String currency = "";
+        String currency;
 
         if (targetCurrency == baseCurrency) {
             return 1;
@@ -41,20 +43,14 @@ public class CurrencyPrice {
             currency = baseCurrency.toString();
             isTargetUSD = true;
         } else {
-            String baseFile = System.getProperty("user.dir") + File.separator +
-                    "src" + File.separator +
-                    "stockData" + File.separator +
-                    baseCurrency + filename;
+            String baseFile = "stockData" + File.separator + baseCurrency + filename;
             readFile(baseFile);
             double base = searchFile(baseFile, false);
 //            System.out.println(base);
 
             p.clear();
 
-            String targetFile = System.getProperty("user.dir") + File.separator +
-                    "src" + File.separator +
-                    "stockData" + File.separator +
-                    targetCurrency + filename;
+            String targetFile = "stockData" + File.separator + targetCurrency + filename;
             readFile(targetFile);
             double target = searchFile(targetFile, false);
 //            System.out.println(target);
@@ -62,52 +58,9 @@ public class CurrencyPrice {
             return target/base;
         }
 
-//        filename = System.getProperty("user.dir") + File.separator +
-//                "src" + File.separator +
-//                "stockData" + File.separator +
-//                currency + filename;
+        filename = "stockData" + File.separator + currency + filename;
+        readFile(filename);
 
-        Properties properties = new Properties();
-        InputStream input = null;
-
-        try {
-            input = Thread.currentThread().getContextClassLoader().getResourceAsStream("EUR_2012.json");
-            properties.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (input != null) try { input.close(); } catch (IOException ignore) {}
-        }
-
-        System.out.println(input);
-
-        System.out.println(Arrays.toString(properties.stringPropertyNames().toArray()));
-
-//        try {
-//
-//            // read until a single byte is available
-//            while(input.available()>0) {
-//
-//                // read the byte and convert the integer to character
-//                char c = (char)input.read();
-//
-//                // print the characters
-//                System.out.println("Char: "+c);
-//            }
-//        } catch(Exception e) {
-//            // if any I/O error occurs
-//            e.printStackTrace();
-//        } finally {
-////            // releases any system resources associated with the stream
-////            if(inStream!=null)
-////                inStream.close();
-//            if(input!=null)
-//                try {
-//                    input.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//        }
 
         // Testing
         // System.out.println(filename);
@@ -120,8 +73,8 @@ public class CurrencyPrice {
 //            System.out.println(entry);
 //        }
 
-//        return searchFile(time, isTargetUSD);
-        return 1;
+        return searchFile(time, isTargetUSD);
+//        return 1;
     }
 
     // searches the file for the given time
@@ -131,16 +84,37 @@ public class CurrencyPrice {
         return (isTargetUSD) ? 1/value: value;
     }
 
+//    private static void readFile(String filename) {
+//        try (Stream<String> stream = Files.lines(Paths.get(filename))) {
+//            stream
+//                    .filter(line -> line.startsWith("[1"))
+//                    .map(CurrencyPrice::format)
+//                    .collect(Collectors.toList());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     private static void readFile(String filename) {
-        try (Stream<String> stream = Files.lines(Paths.get(filename))) {
-            stream
-                    .filter(line -> line.startsWith("[1"))
-                    .map(CurrencyPrice::format)
-                    .collect(Collectors.toList());
+        Properties properties = new Properties();
+        InputStream input = null;
+
+        try {
+            input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+            properties.load(input);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (input != null) try { input.close(); } catch (IOException ignore) {}
         }
+
+        properties.stringPropertyNames().stream()
+                .filter(line -> line.startsWith("[1"))
+                .map(CurrencyPrice::format)
+                .collect(Collectors.toList());
     }
+
+
 
     // removes trailing comma if present
     // splits string into a pair of string to double which is added to the hashMap
