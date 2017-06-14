@@ -1,32 +1,26 @@
 package apidata;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import utils.JFCurrency;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CurrencyPrice {
 
     // TODO: Turn into a list of hashMaps; one for each file?
     private static HashMap<String, Double> p = new HashMap<>();
-//    private static Set<HashMap<String, Double>> prices = new HashSet<>();
+    private static HashMap<String,HashMap<String, Double>> prices = new HashMap<>();
 
     public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
         // TODO: refactor datetime
         String time = DateWrapper.time(t);
         String filename = "_" + year + ".json";
+        String fn;
 
         // Testing
 //        System.out.println(targetCurrency + " -> " + baseCurrency);
@@ -43,23 +37,26 @@ public class CurrencyPrice {
             currency = baseCurrency.toString();
             isTargetUSD = true;
         } else {
-            String baseFile = "stockData" + File.separator + baseCurrency + filename;
-            readFile(baseFile);
-            double base = searchFile(baseFile, false);
+            fn = baseCurrency + filename;
+            String baseFile = "stockData" + File.separator + fn;
+            readFile(baseFile, fn);
+            double base = searchFile(fn, time, false);
 //            System.out.println(base);
 
             p.clear();
 
-            String targetFile = "stockData" + File.separator + targetCurrency + filename;
-            readFile(targetFile);
-            double target = searchFile(targetFile, false);
+            fn = targetCurrency + filename;
+            String targetFile = "stockData" + File.separator + fn;
+            readFile(targetFile, fn);
+            double target = searchFile(fn, time, false);
 //            System.out.println(target);
 
             return target/base;
         }
 
-        filename = "stockData" + File.separator + currency + filename;
-        readFile(filename);
+        fn = currency + filename;
+        filename = "stockData" + File.separator + fn;
+        readFile(filename, fn);
 
 
         // Testing
@@ -73,29 +70,19 @@ public class CurrencyPrice {
 //            System.out.println(entry);
 //        }
 
-        return searchFile(time, isTargetUSD);
+        return searchFile(fn, time, isTargetUSD);
 //        return 1;
     }
 
     // searches the file for the given time
-    private static Double searchFile(String time, boolean isTargetUSD) {
-        final Double firstValue = p.entrySet().iterator().next().getValue();
-        final Double value = p.getOrDefault(time, firstValue);
+    private static Double searchFile(String fn, String time, boolean isTargetUSD) {
+        final HashMap<String, Double> rates = prices.getOrDefault(fn, p);
+        final Double firstValue = rates.entrySet().iterator().next().getValue();
+        final Double value = rates.getOrDefault(time, firstValue);
         return (isTargetUSD) ? 1/value: value;
     }
 
-//    private static void readFile(String filename) {
-//        try (Stream<String> stream = Files.lines(Paths.get(filename))) {
-//            stream
-//                    .filter(line -> line.startsWith("[1"))
-//                    .map(CurrencyPrice::format)
-//                    .collect(Collectors.toList());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    private static void readFile(String filename) {
+    private static void readFile(String filename, String fn) {
         Properties properties = new Properties();
         InputStream input = null;
 
@@ -112,6 +99,8 @@ public class CurrencyPrice {
                 .filter(line -> line.startsWith("[1"))
                 .map(CurrencyPrice::format)
                 .collect(Collectors.toList());
+
+        prices.put(fn, p);
     }
 
 
