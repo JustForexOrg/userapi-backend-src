@@ -13,11 +13,11 @@ public class readFileTest {
         System.out.println(DateWrapper.time(date));
 
         System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.EUR, date2));
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.EUR, date));
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.USD, date2));
-
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.GBP, date));
+//        System.out.println(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.EUR, date2));
+//        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.EUR, date));
+//        System.out.println(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.USD, date2));
+//
+//        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.GBP, date));
     }
 
 }

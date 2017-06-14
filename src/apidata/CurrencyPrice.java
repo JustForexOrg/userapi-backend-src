@@ -2,12 +2,15 @@ package apidata;
 
 import utils.JFCurrency;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,6 +18,7 @@ public class CurrencyPrice {
 
     // TODO: Turn into a list of hashMaps; one for each file?
     private static HashMap<String, Double> p = new HashMap<>();
+//    private static Set<HashMap<String, Double>> prices = new HashSet<>();
 
     public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
@@ -58,22 +62,66 @@ public class CurrencyPrice {
             return target/base;
         }
 
-        filename = System.getProperty("user.dir") + File.separator +
-                "src" + File.separator +
-                "stockData" + File.separator +
-                currency + filename;
+//        filename = System.getProperty("user.dir") + File.separator +
+//                "src" + File.separator +
+//                "stockData" + File.separator +
+//                currency + filename;
+
+        Properties properties = new Properties();
+        InputStream input = null;
+
+        try {
+            input = Thread.currentThread().getContextClassLoader().getResourceAsStream("EUR_2012.json");
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (input != null) try { input.close(); } catch (IOException ignore) {}
+        }
+
+        System.out.println(input);
+
+        System.out.println(Arrays.toString(properties.stringPropertyNames().toArray()));
+
+//        try {
+//
+//            // read until a single byte is available
+//            while(input.available()>0) {
+//
+//                // read the byte and convert the integer to character
+//                char c = (char)input.read();
+//
+//                // print the characters
+//                System.out.println("Char: "+c);
+//            }
+//        } catch(Exception e) {
+//            // if any I/O error occurs
+//            e.printStackTrace();
+//        } finally {
+////            // releases any system resources associated with the stream
+////            if(inStream!=null)
+////                inStream.close();
+//            if(input!=null)
+//                try {
+//                    input.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//        }
+
         // Testing
         // System.out.println(filename);
         // TODO: merge searchFile and readFile
         // TODO: stop searching file after date (as it's in ascending order) (is there any point? do we want all in memory?)
-        readFile(filename);
+//        readFile(filename);
 
         // Testing
 //        for (HashMap.Entry entry:p.entrySet()) {
 //            System.out.println(entry);
 //        }
 
-        return searchFile(time, isTargetUSD);
+//        return searchFile(time, isTargetUSD);
+        return 1;
     }
 
     // searches the file for the given time
