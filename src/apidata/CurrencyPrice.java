@@ -41,15 +41,11 @@ public class CurrencyPrice {
             String baseFile = "stockData" + File.separator + fn;
             readFile(baseFile, fn);
             double base = searchFile(fn, time, false);
-//            System.out.println(base);
-
-            p.clear();
 
             fn = targetCurrency + filename;
             String targetFile = "stockData" + File.separator + fn;
             readFile(targetFile, fn);
             double target = searchFile(fn, time, false);
-//            System.out.println(target);
 
             return target/base;
         }
@@ -58,31 +54,25 @@ public class CurrencyPrice {
         filename = "stockData" + File.separator + fn;
         readFile(filename, fn);
 
-
-        // Testing
-        // System.out.println(filename);
-        // TODO: merge searchFile and readFile
-        // TODO: stop searching file after date (as it's in ascending order) (is there any point? do we want all in memory?)
-//        readFile(filename);
-
-        // Testing
-//        for (HashMap.Entry entry:p.entrySet()) {
-//            System.out.println(entry);
-//        }
-
         return searchFile(fn, time, isTargetUSD);
-//        return 1;
     }
 
     // searches the file for the given time
     private static Double searchFile(String fn, String time, boolean isTargetUSD) {
-        final HashMap<String, Double> rates = prices.getOrDefault(fn, p);
+        final HashMap<String, Double> rates;
+        if (prices.containsKey(fn)) {
+            rates = prices.get(fn);
+        } else {
+            System.out.println("---ERROR");
+            readFile("stockData" + File.separator + fn, fn);
+            rates = prices.get(fn);
+        }
         final Double firstValue = rates.entrySet().iterator().next().getValue();
         final Double value = rates.getOrDefault(time, firstValue);
         return (isTargetUSD) ? 1/value: value;
     }
 
-    private static void readFile(String filename, String fn) {
+    private static String readFile(String filename, String fn) {
         Properties properties = new Properties();
         InputStream input = null;
 
@@ -101,6 +91,9 @@ public class CurrencyPrice {
                 .collect(Collectors.toList());
 
         prices.put(fn, p);
+
+
+        return filename;
     }
 
 
