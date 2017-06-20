@@ -5,7 +5,6 @@ import utils.JFCurrency;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,14 +16,16 @@ public class CurrencyPrice {
             "GBP_2012.json", "GBP_2013.json", "GBP_2014.json", "GBP_2015.json", "GBP_2016.json",
             "JPY_2012.json", "JPY_2013.json", "JPY_2014.json", "JPY_2015.json", "JPY_2016.json"};
 
-    private static HashMap<String,HashMap<String, Double>> prices = new HashMap<>();
+    private static HashMap<String,HashMap<String, Double>> prices = readAllFiles();
 
-    public static void readAllFiles() {
+    public static HashMap<String, HashMap<String, Double>> readAllFiles() {
+        HashMap<String, HashMap<String, Double>> p = new HashMap<>();
         for(int i = 0; i < fileList.length; i++) {
             String temp = fileList[i];
             fileList[i] = "stockData" + File.separator + temp;
-            readFile(fileList[i], temp);
+            readFile(fileList[i], temp, p);
         }
+        return p;
     }
 
     public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
@@ -56,12 +57,12 @@ public class CurrencyPrice {
         } else {
             fn = baseCurrency + filename;
             String baseFile = "stockData" + File.separator + fn;
-            readFile(baseFile, fn);
+            readFile(baseFile, fn, prices);
             double base = searchFile(fn, time, false);
 
             fn = targetCurrency + filename;
             String targetFile = "stockData" + File.separator + fn;
-            readFile(targetFile, fn);
+            readFile(targetFile, fn, prices);
             double target = searchFile(fn, time, false);
 
             return target/base;
@@ -69,7 +70,7 @@ public class CurrencyPrice {
 
         fn = currency + filename;
         filename = "stockData" + File.separator + fn;
-        readFile(filename, fn);
+        readFile(filename, fn, prices);
 
         return searchFile(fn, time, isTargetUSD);
     }
@@ -81,7 +82,7 @@ public class CurrencyPrice {
             rates = prices.get(fn);
         } else {
             System.out.println("---ERROR");
-            readFile("stockData" + File.separator + fn, fn);
+            readFile("stockData" + File.separator + fn, fn, prices);
             rates = prices.get(fn);
         }
         final Double firstValue = rates.entrySet().iterator().next().getValue();
@@ -90,8 +91,11 @@ public class CurrencyPrice {
     }
 
     // reads the file, parses it and populates a hashmap of string->doubles which is added to the global hashmap
-    private static void readFile(String filename, String fn) {
-        if(!prices.containsKey(fn)) {
+    private static void readFile(String filename, String fn, HashMap<String, HashMap<String, Double>> p) {if (filename.startsWith("stockData" + File.separator + "stockData")) {
+            filename = fn;
+        }
+
+        if(!p.containsKey(fn)) {
             Properties properties = new Properties();
             InputStream input = null;
 
@@ -111,7 +115,7 @@ public class CurrencyPrice {
                     .filter(line -> line.startsWith("[1"))
                     .collect(Collectors.toList());
 
-            prices.put(fn, makePairs(file));
+            p.put(fn, makePairs(file));
         }
     }
 

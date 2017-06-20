@@ -12,17 +12,10 @@ public class readFileTest {
 
         double t = 1000000;
 
-//        System.out.println(DateWrapper.time(date));
         double lStartTime = System.nanoTime();
-        CurrencyPrice.readAllFiles();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
         double lEndTime = System.nanoTime();
         double output = lEndTime - lStartTime;
-        System.out.println(" Read in Files| Time: " + output/t);
-
-        lStartTime = System.nanoTime();
-        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
-        lEndTime = System.nanoTime();
-        output = lEndTime - lStartTime;
         System.out.println(" | Time: " + output/t);
 
         lStartTime = System.nanoTime();
