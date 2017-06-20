@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class CurrencyPrice {
 
     private static HashMap<String,HashMap<String, Double>> prices = new HashMap<>();
-    private static HashMap<String, Double> file = new HashMap<>();
 
     public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
@@ -71,15 +70,9 @@ public class CurrencyPrice {
         return (isTargetUSD) ? 1/value: value;
     }
 
+    // reads the file, parses it and populates a hashmap of string->doubles which is added to the global hashmap
     private static void readFile(String filename, String fn) {
-//        prices.keySet().forEach(System.out::println);
-//        System.out.println("\n");
-        if (!file.isEmpty()) System.out.println(file.entrySet().iterator().next().getValue());
-        long start = System.nanoTime();
-
         if(!prices.containsKey(fn)) {
-//            System.out.println("not here");
-
             Properties properties = new Properties();
             InputStream input = null;
 
@@ -99,20 +92,11 @@ public class CurrencyPrice {
                     .filter(line -> line.startsWith("[1"))
                     .collect(Collectors.toList());
 
-            prices.put(fn, makeFile(file));
-//                    .map(CurrencyPrice::format)
-//            System.out.println();
-
-//        } else {
-//            System.out.println("already here");
-//            prices.put(fn, CurrencyPrice.file);
+            prices.put(fn, makePairs(file));
         }
-        long end = System.nanoTime();
-        long time = end - start;
-//        System.out.println("\n" + time/10000 + "\n");
     }
 
-    private static HashMap<String, Double> makeFile(List<String> file) {
+    private static HashMap<String, Double> makePairs(List<String> file) {
         HashMap<String, Double> map = new HashMap<>();
         for (String s: file) {
             if (s.endsWith(",")) {
@@ -124,17 +108,4 @@ public class CurrencyPrice {
         }
         return map;
     }
-
-    // removes trailing comma if present
-    // splits string into a pair of string -> double which is added to the hashMap
-    private static String format(String s) {
-        if (s.endsWith(",")) {
-            s = s.substring(0, s.length() - 1);
-        }
-        String fst = s.substring(1, s.indexOf(","));
-        Double snd = Double.parseDouble(s.substring(s.indexOf(",")+1, s.length()-1));
-        file.put(fst, snd);
-        return s;
-    }
-
 }

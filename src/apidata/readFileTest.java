@@ -10,15 +10,71 @@ public class readFileTest {
         LocalDateTime date = LocalDateTime.parse("2014-01-02T01:02:00");
         LocalDateTime date2 = LocalDateTime.parse("2012-01-02T01:02:00");
 
-//        System.out.println(DateWrapper.time(date));
-//
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
-        System.out.println("\n\n");
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.EUR, date));
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.EUR, date));
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.USD, date2));
+        float t = 1000;
 
-        System.out.println(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.GBP, date));
+//        System.out.println(DateWrapper.time(date));
+        float lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
+        float lEndTime = System.nanoTime();
+        float output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.EUR, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.EUR, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.USD, date2));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.GBP, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        System.out.println("\n");
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.EUR, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.EUR, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.USD, JFCurrency.USD, date2));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
+        lStartTime = System.nanoTime();
+        System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.GBP, date));
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
+        System.out.println(" | Time: " + output/t);
+
     }
 
 }
