@@ -10,13 +10,19 @@ public class readFileTest {
         LocalDateTime date = LocalDateTime.parse("2014-01-02T01:02:00");
         LocalDateTime date2 = LocalDateTime.parse("2012-01-02T01:02:00");
 
-        float t = 1000;
+        double t = 1000000;
 
 //        System.out.println(DateWrapper.time(date));
-        float lStartTime = System.nanoTime();
+        double lStartTime = System.nanoTime();
+        CurrencyPrice.readAllFiles();
+        double lEndTime = System.nanoTime();
+        double output = lEndTime - lStartTime;
+        System.out.println(" Read in Files| Time: " + output/t);
+
+        lStartTime = System.nanoTime();
         System.out.print(CurrencyPrice.getPrice(JFCurrency.EUR, JFCurrency.USD, date));
-        float lEndTime = System.nanoTime();
-        float output = lEndTime - lStartTime;
+        lEndTime = System.nanoTime();
+        output = lEndTime - lStartTime;
         System.out.println(" | Time: " + output/t);
 
         lStartTime = System.nanoTime();

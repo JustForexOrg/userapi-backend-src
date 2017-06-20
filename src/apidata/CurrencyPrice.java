@@ -5,15 +5,34 @@ import utils.JFCurrency;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CurrencyPrice {
 
+    private static String[] fileList = {"CHF_2012.json", "CHF_2013.json", "CHF_2014.json", "CHF_2015.json", "CHF_2016.json",
+            "EUR_2012.json", "EUR_2013.json", "EUR_2014.json", "EUR_2015.json", "EUR_2016.json",
+            "GBP_2012.json", "GBP_2013.json", "GBP_2014.json", "GBP_2015.json", "GBP_2016.json",
+            "JPY_2012.json", "JPY_2013.json", "JPY_2014.json", "JPY_2015.json", "JPY_2016.json"};
+
     private static HashMap<String,HashMap<String, Double>> prices = new HashMap<>();
 
+    public static void readAllFiles() {
+        for(int i = 0; i < fileList.length; i++) {
+            String temp = fileList[i];
+            fileList[i] = "stockData" + File.separator + temp;
+            readFile(fileList[i], temp);
+        }
+    }
+
     public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
+
+//        System.out.println(Arrays.toString(fileList));
+//        readAllFiles();
+//        System.out.println(Arrays.toString(fileList));
+
         String year = String.valueOf(t.getYear());
         String time = DateWrapper.time(t);
         String filename = "_" + year + ".json";
