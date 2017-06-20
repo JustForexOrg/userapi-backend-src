@@ -11,13 +11,11 @@ import java.util.stream.Collectors;
 
 public class CurrencyPrice {
 
-    // TODO: Turn into a list of hashMaps; one for each file?
-    private static HashMap<String, Double> p = new HashMap<>();
     private static HashMap<String,HashMap<String, Double>> prices = new HashMap<>();
+    private static HashMap<String, Double> file = new HashMap<>();
 
     public static double getPrice(JFCurrency targetCurrency, JFCurrency baseCurrency, LocalDateTime t) {
         String year = String.valueOf(t.getYear());
-        // TODO: refactor datetime
         String time = DateWrapper.time(t);
         String filename = "_" + year + ".json";
         String fn;
@@ -28,6 +26,7 @@ public class CurrencyPrice {
 
         boolean isTargetUSD = false;
         String currency;
+//        if (!file.isEmpty()) file.clear();
 
         if (targetCurrency == baseCurrency) {
             return 1;
@@ -72,41 +71,69 @@ public class CurrencyPrice {
         return (isTargetUSD) ? 1/value: value;
     }
 
-    private static String readFile(String filename, String fn) {
-        Properties properties = new Properties();
-        InputStream input = null;
+    private static void readFile(String filename, String fn) {
+//        prices.keySet().forEach(System.out::println);
+//        System.out.println("\n");
+        if (!file.isEmpty()) System.out.println(file.entrySet().iterator().next().getValue());
+        long start = System.nanoTime();
 
-        try {
-            input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
-            properties.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (input != null) try { input.close(); } catch (IOException ignore) {}
+        if(!prices.containsKey(fn)) {
+//            System.out.println("not here");
+
+            Properties properties = new Properties();
+            InputStream input = null;
+
+            try {
+                input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+                properties.load(input);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (input != null) try {
+                    input.close();
+                } catch (IOException ignore) {
+                }
+            }
+
+            List<String> file = properties.stringPropertyNames().stream()
+                    .filter(line -> line.startsWith("[1"))
+                    .collect(Collectors.toList());
+
+            prices.put(fn, makeFile(file));
+//                    .map(CurrencyPrice::format)
+//            System.out.println();
+
+//        } else {
+//            System.out.println("already here");
+//            prices.put(fn, CurrencyPrice.file);
         }
-
-        properties.stringPropertyNames().stream()
-                .filter(line -> line.startsWith("[1"))
-                .map(CurrencyPrice::format)
-                .collect(Collectors.toList());
-
-        prices.put(fn, p);
-
-
-        return filename;
+        long end = System.nanoTime();
+        long time = end - start;
+//        System.out.println("\n" + time/10000 + "\n");
     }
 
-
+    private static HashMap<String, Double> makeFile(List<String> file) {
+        HashMap<String, Double> map = new HashMap<>();
+        for (String s: file) {
+            if (s.endsWith(",")) {
+                s = s.substring(0, s.length() - 1);
+            }
+            String fst = s.substring(1, s.indexOf(","));
+            Double snd = Double.parseDouble(s.substring(s.indexOf(",")+1, s.length()-1));
+            map.put(fst, snd);
+        }
+        return map;
+    }
 
     // removes trailing comma if present
-    // splits string into a pair of string to double which is added to the hashMap
+    // splits string into a pair of string -> double which is added to the hashMap
     private static String format(String s) {
         if (s.endsWith(",")) {
             s = s.substring(0, s.length() - 1);
         }
         String fst = s.substring(1, s.indexOf(","));
         Double snd = Double.parseDouble(s.substring(s.indexOf(",")+1, s.length()-1));
-        p.put(fst, snd);
+        file.put(fst, snd);
         return s;
     }
 
